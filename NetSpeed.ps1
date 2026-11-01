@@ -27,6 +27,7 @@ $script:trafficSaveCounter = 0
 
 # --- Настройки по умолчанию ---
 $script:defaultSettings = @{
+    language         = "ru"  # "ru" или "en"
     opacity          = 1.0
     hoverOpacity     = 1.0
     isPinned         = $false
@@ -62,6 +63,120 @@ $script:defaultSettings = @{
     selectedInterface = ""  # Пустая строка = все интерфейсы
 }
 
+# --- Языки и локализация (i18n) ---
+$script:i18n = @{
+    ru = @{
+        interfaceMenu       = "Интерфейсы"
+        allInterfaces       = "▼▲ Все интерфейсы"
+        unitsMenu           = "Единицы измерения"
+        bytesUnit           = "Байт/с (KB/s, MB/s)"
+        bitsUnit            = "Бит/с (Kbps, Mbps)"
+        intervalMenu        = "Интервал обновления"
+        pixelsPerPointMenu  = "Пикселей на точку (масштаб)"
+        graphVisibilityMenu = "Отображение графиков"
+        labelVisibilityMenu = "Отображение значений скорости"
+        trafficVisibilityMenu = "Отображение значений трафика"
+        labelPositionMenu   = "Положение значений"
+        colorsMenu          = "Цвета"
+        downloadColor       = "Цвет загрузки (▼)"
+        uploadColor         = "Цвет отдачи (▲)"
+        totalColor          = "Цвет суммы (▼▲)"
+        bgColor             = "Цвет фона окна"
+        graphBgColor        = "Цвет фона графика"
+        gridColor           = "Цвет сетки"
+        scaleTextColor      = "Цвет текста шкалы"
+        resetColors         = "Сбросить цвета по умолчанию"
+        lineThicknessMenu   = "Толщина линий графика"
+        fontSizeMenu        = "Размер шрифта значений"
+        scaleFontSizeMenu   = "Размер шрифта шкалы"
+        opacityMenu         = "Прозрачность"
+        hoverOpacityMenu    = "Прозрачность при наведении"
+        pinMenu             = "Залипание окна (Pin)"
+        clickThroughMenu    = "Прокликивание (Click-Through)"
+        shortcutMenu        = "Создать ярлык"
+        trafficTableMenu    = "Таблица трафика"
+        languageMenu        = "Язык / Language"
+        exitMenu            = "Выход"
+        graphTotal          = "▼▲ Общая"
+        graphDown           = "▼ Загрузка"
+        graphUp             = "▲ Отдача"
+        trafficTotal        = "▼▲ Общий"
+        posTop              = "Сверху"
+        posBottom           = "Снизу"
+        posLeft             = "Слева"
+        posRight            = "Справа"
+        shortcutCreated     = "Ярлык успешно создан на рабочем столе!"
+        shortcutError       = "Ошибка при создании ярлыка: "
+        trafficWindowTitle  = "Учет трафика NetSpeed"
+        dateCol             = "Дата"
+        downCol             = "Загрузка"
+        upCol               = "Отдача"
+        totalCol            = "Всего"
+        btnRefresh          = "Обновить"
+        btnOpenFile         = "Открыть файл"
+        btnClose            = "Закрыть"
+    }
+    en = @{
+        interfaceMenu       = "Interfaces"
+        allInterfaces       = "▼▲ All Interfaces"
+        unitsMenu           = "Measurement Units"
+        bytesUnit           = "Bytes/s (KB/s, MB/s)"
+        bitsUnit            = "Bits/s (Kbps, Mbps)"
+        intervalMenu        = "Update Interval"
+        pixelsPerPointMenu  = "Pixels per Point (Scale)"
+        graphVisibilityMenu = "Graph Visibility"
+        labelVisibilityMenu = "Speed Labels Visibility"
+        trafficVisibilityMenu = "Traffic Labels Visibility"
+        labelPositionMenu   = "Label Position"
+        colorsMenu          = "Colors"
+        downloadColor       = "Download Color (▼)"
+        uploadColor         = "Upload Color (▲)"
+        totalColor          = "Total Color (▼▲)"
+        bgColor             = "Window Background Color"
+        graphBgColor        = "Graph Background Color"
+        gridColor           = "Grid Color"
+        scaleTextColor      = "Scale Text Color"
+        resetColors         = "Reset Default Colors"
+        lineThicknessMenu   = "Graph Line Thickness"
+        fontSizeMenu        = "Value Font Size"
+        scaleFontSizeMenu   = "Scale Font Size"
+        opacityMenu         = "Opacity"
+        hoverOpacityMenu    = "Hover Opacity"
+        pinMenu             = "Pin Window"
+        clickThroughMenu    = "Click-Through Mode"
+        shortcutMenu        = "Create Desktop Shortcut"
+        trafficTableMenu    = "Traffic Statistics Table"
+        languageMenu        = "Language / Язык"
+        exitMenu            = "Exit"
+        graphTotal          = "▼▲ Total"
+        graphDown           = "▼ Download"
+        graphUp             = "▲ Upload"
+        trafficTotal        = "▼▲ Total"
+        posTop              = "Top"
+        posBottom           = "Bottom"
+        posLeft             = "Left"
+        posRight            = "Right"
+        shortcutCreated     = "Desktop shortcut created successfully!"
+        shortcutError       = "Error creating shortcut: "
+        trafficWindowTitle  = "NetSpeed Traffic Statistics"
+        dateCol             = "Date"
+        downCol             = "Download"
+        upCol               = "Upload"
+        totalCol            = "Total"
+        btnRefresh          = "Refresh"
+        btnOpenFile         = "Open File"
+        btnClose            = "Close"
+    }
+}
+
+function T($key) {
+    $lang = if ($script:language -and $script:i18n.ContainsKey($script:language)) { $script:language } else { "ru" }
+    if ($script:i18n[$lang].ContainsKey($key)) {
+        return $script:i18n[$lang][$key]
+    }
+    return $key
+}
+
 # --- Функция загрузки настроек ---
 function LoadSettings {
     if (Test-Path $script:settingsPath) {
@@ -78,6 +193,7 @@ function LoadSettings {
 # --- Функция сохранения настроек ---
 function SaveSettings {
     $settings = @{
+        language        = $script:language
         opacity         = $script:opacity
         hoverOpacity    = $script:hoverOpacity
         isPinned        = $script:isPinned
@@ -245,7 +361,7 @@ function SaveTrafficTableFile {
 
 function ShowTrafficWindow {
     $trafficForm = New-Object System.Windows.Forms.Form
-    $trafficForm.Text = "Статистика трафика - NetSpeed"
+    $trafficForm.Text = T "trafficWindowTitle"
     $trafficForm.Size = New-Object System.Drawing.Size(600, 450)
     $trafficForm.StartPosition = "CenterParent"
     $trafficForm.BackColor = $script:bgColor
@@ -274,10 +390,10 @@ function ShowTrafficWindow {
     $grid.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
     $grid.SelectionMode = [System.Windows.Forms.DataGridViewSelectionMode]::FullRowSelect
 
-    [void]$grid.Columns.Add("Date", "Дата")
-    [void]$grid.Columns.Add("Down", "Загрузка")
-    [void]$grid.Columns.Add("Up", "Отдача")
-    [void]$grid.Columns.Add("Total", "Общее")
+    [void]$grid.Columns.Add("Date", (T "dateCol"))
+    [void]$grid.Columns.Add("Down", (T "downCol"))
+    [void]$grid.Columns.Add("Up", (T "upCol"))
+    [void]$grid.Columns.Add("Total", (T "totalCol"))
 
     function PopulateGrid {
         $grid.Rows.Clear()
@@ -295,7 +411,7 @@ function ShowTrafficWindow {
     $panel.BackColor = $script:bgColor
 
     $btnRefresh = New-Object System.Windows.Forms.Button
-    $btnRefresh.Text = "Обновить"
+    $btnRefresh.Text = T "btnRefresh"
     $btnRefresh.Size = New-Object System.Drawing.Size(90, 28)
     $btnRefresh.Location = New-Object System.Drawing.Point(12, 8)
     $btnRefresh.FlatStyle = "Flat"
@@ -304,7 +420,7 @@ function ShowTrafficWindow {
     $btnRefresh.Add_Click({ PopulateGrid })
 
     $btnOpenFile = New-Object System.Windows.Forms.Button
-    $btnOpenFile.Text = "Открыть файл таблицы"
+    $btnOpenFile.Text = T "btnOpenFile"
     $btnOpenFile.Size = New-Object System.Drawing.Size(160, 28)
     $btnOpenFile.Location = New-Object System.Drawing.Point(110, 8)
     $btnOpenFile.FlatStyle = "Flat"
@@ -318,7 +434,7 @@ function ShowTrafficWindow {
     })
 
     $btnClose = New-Object System.Windows.Forms.Button
-    $btnClose.Text = "Закрыть"
+    $btnClose.Text = T "btnClose"
     $btnClose.Size = New-Object System.Drawing.Size(90, 28)
     $btnClose.Location = New-Object System.Drawing.Point(480, 8)
     $btnClose.Anchor = [System.Windows.Forms.AnchorStyles]::Top -bor [System.Windows.Forms.AnchorStyles]::Right
@@ -364,15 +480,15 @@ function CreateDesktopShortcut {
         $Shortcut.Save()
 
         [System.Windows.Forms.MessageBox]::Show(
-            "Ярлык успешно создан на рабочем столе!",
+            (T "shortcutCreated"),
             "NetSpeed",
             [System.Windows.Forms.MessageBoxButtons]::OK,
             [System.Windows.Forms.MessageBoxIcon]::Information
         )
     } catch {
         [System.Windows.Forms.MessageBox]::Show(
-            "Ошибка при создании ярлыка: $($_.Exception.Message)",
-            "NetSpeed - Ошибка",
+            ((T "shortcutError") + $_.Exception.Message),
+            "NetSpeed",
             [System.Windows.Forms.MessageBoxButtons]::OK,
             [System.Windows.Forms.MessageBoxIcon]::Error
         )
@@ -462,6 +578,7 @@ $savedSettings = LoadSettings
 
 # --- Применение настроек ---
 if ($savedSettings) {
+    $script:language          = if ($null -ne $savedSettings.language) { $savedSettings.language } else { $script:defaultSettings.language }
     $script:opacity           = if ($null -ne $savedSettings.opacity) { $savedSettings.opacity } else { $script:defaultSettings.opacity }
     $script:hoverOpacity      = if ($null -ne $savedSettings.hoverOpacity) { $savedSettings.hoverOpacity } else { $script:defaultSettings.hoverOpacity }
     $script:isPinned          = if ($null -ne $savedSettings.isPinned) { $savedSettings.isPinned } else { $script:defaultSettings.isPinned }
@@ -494,6 +611,7 @@ if ($savedSettings) {
     $script:showTrafficDown  = if ($null -ne $savedSettings.showTrafficDown)  { $savedSettings.showTrafficDown }  else { $script:defaultSettings.showTrafficDown }
     $script:showTrafficUp    = if ($null -ne $savedSettings.showTrafficUp)    { $savedSettings.showTrafficUp }    else { $script:defaultSettings.showTrafficUp }
 } else {
+    $script:language          = $script:defaultSettings.language
     $script:opacity           = $script:defaultSettings.opacity
     $script:hoverOpacity      = $script:defaultSettings.hoverOpacity
     $script:isPinned          = $script:defaultSettings.isPinned
@@ -2118,16 +2236,43 @@ $clickThroughMenuItem.Add_Click({
     UpdateMenuCheckmarks
 })
 
+# Язык / Language
+$languageMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
+$languageMenuItem.Text = T "languageMenu"
+
+$langRuItem = New-Object System.Windows.Forms.ToolStripMenuItem
+$langRuItem.Text = "Русский"
+$langRuItem.Tag = "ru"
+$langRuItem.Add_Click({
+    $script:language = "ru"
+    UpdateLocalizedTexts
+    UpdateMenuCheckmarks
+    SaveSettings
+})
+
+$langEnItem = New-Object System.Windows.Forms.ToolStripMenuItem
+$langEnItem.Text = "English"
+$langEnItem.Tag = "en"
+$langEnItem.Add_Click({
+    $script:language = "en"
+    UpdateLocalizedTexts
+    UpdateMenuCheckmarks
+    SaveSettings
+})
+
+[void]$languageMenuItem.DropDownItems.Add($langRuItem)
+[void]$languageMenuItem.DropDownItems.Add($langEnItem)
+
 # Создать ярлык
 $createShortcutMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
-$createShortcutMenuItem.Text = "Создать ярлык"
+$createShortcutMenuItem.Text = T "shortcutMenu"
 $createShortcutMenuItem.Add_Click({
     CreateDesktopShortcut
 })
 
 # Выход
 $exitMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
-$exitMenuItem.Text = "Выход"
+$exitMenuItem.Text = T "exitMenu"
 $exitMenuItem.Add_Click({
     SaveTrafficHistory
     SaveSettings
@@ -2159,8 +2304,60 @@ $exitMenuItem.Add_Click({
 [void]$contextMenu.Items.Add($pinMenuItem)
 [void]$contextMenu.Items.Add($clickThroughMenuItem)
 [void]$contextMenu.Items.Add("-")
+[void]$contextMenu.Items.Add($languageMenuItem)
 [void]$contextMenu.Items.Add($createShortcutMenuItem)
 [void]$contextMenu.Items.Add($exitMenuItem)
+
+function UpdateLocalizedTexts {
+    $interfaceMenuItem.Text         = T "interfaceMenu"
+    $allInterfacesItem.Text         = T "allInterfaces"
+    $trafficTableMenuItem.Text      = T "trafficTableMenu"
+    $unitsMenuItem.Text             = T "unitsMenu"
+    $bytesMenuItem.Text             = T "bytesUnit"
+    $bitsMenuItem.Text              = T "bitsUnit"
+    $intervalMenuItem.Text          = T "intervalMenu"
+    $pixelsPerPointMenuItem.Text    = T "pixelsPerPointMenu"
+    $graphVisibilityMenuItem.Text   = T "graphVisibilityMenu"
+    $labelVisibilityMenuItem.Text   = T "labelVisibilityMenu"
+    $trafficVisibilityMenuItem.Text = T "trafficVisibilityMenu"
+    $labelPositionMenuItem.Text     = T "labelPositionMenu"
+    $colorsMenuItem.Text            = T "colorsMenu"
+    $downloadColorItem.Text         = T "downloadColor"
+    $uploadColorItem.Text           = T "uploadColor"
+    $totalColorItem.Text            = T "totalColor"
+    $bgColorItem.Text               = T "bgColor"
+    $graphBgColorItem.Text          = T "graphBgColor"
+    $gridColorItem.Text             = T "gridColor"
+    $scaleTextColorItem.Text        = T "scaleTextColor"
+    $resetColorsItem.Text           = T "resetColors"
+    $lineThicknessMenuItem.Text     = T "lineThicknessMenu"
+    $fontSizeMenuItem.Text          = T "fontSizeMenu"
+    $scaleFontSizeMenuItem.Text     = T "scaleFontSizeMenu"
+    $opacityMenuItem.Text           = T "opacityMenu"
+    $hoverOpacityMenuItem.Text      = T "hoverOpacityMenu"
+    $pinMenuItem.Text               = T "pinMenu"
+    $clickThroughMenuItem.Text      = T "clickThroughMenu"
+    $createShortcutMenuItem.Text    = T "shortcutMenu"
+    $languageMenuItem.Text          = T "languageMenu"
+    $exitMenuItem.Text              = T "exitMenu"
+
+    $graphTotalItem.Text            = T "graphTotal"
+    $graphDownItem.Text             = T "graphDown"
+    $graphUpItem.Text               = T "graphUp"
+    $labelTotalItem.Text            = T "graphTotal"
+    $labelDownItem.Text             = T "graphDown"
+    $labelUpItem.Text               = T "graphUp"
+    $trafficTotalItem.Text          = T "trafficTotal"
+    $trafficDownItem.Text           = T "trafficDown"
+    $trafficUpItem.Text             = T "trafficUp"
+
+    $posTopItem.Text                = T "posTop"
+    $posBottomItem.Text             = T "posBottom"
+    $posLeftItem.Text               = T "posLeft"
+    $posRightItem.Text              = T "posRight"
+
+    UpdateSpeedLabel
+}
 
 function UpdateMenuCheckmarks {
     # Интерфейсы
@@ -2237,6 +2434,8 @@ function UpdateMenuCheckmarks {
 
     $pinMenuItem.Checked          = $script:isPinned
     $clickThroughMenuItem.Checked = $script:clickThrough
+    $langRuItem.Checked           = ($script:language -eq "ru")
+    $langEnItem.Checked           = ($script:language -eq "en")
 }
 
 # Привязываем контекстное меню
@@ -2321,6 +2520,7 @@ if ($script:clickThrough) {
 }
 
 # Инициализация и запуск
+UpdateLocalizedTexts
 UpdateGdiTools
 UpdateMaxValue
 DrawGraph
