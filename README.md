@@ -5,6 +5,8 @@
 > [!NOTE]
 > 🤖 **Note**: This project and its source code were generated with the help of Artificial Intelligence (AI).
 
+https://github.com/user-attachments/assets/bc9da1c2-0953-4030-ada2-343c286e934f
+
 ---
 
 ## ✨ Features
