@@ -1,72 +1,72 @@
-# ⚡ NetSpeed — Монитор скорости сети для Windows
+# ⚡ NetSpeed — Network Speed Monitor for Windows
 
-**NetSpeed** — это легкое, гибкое и функциональное приложение на PowerShell / WinForms для мониторинга сетевого трафика в реальном времени. Приложение отображает компактный виджет с графиком скорости поверх других окон и позволяет отслеживать расход трафика.
+**NetSpeed** is a lightweight, customizable, and feature-rich PowerShell / WinForms application for real-time network traffic monitoring. The app displays a compact floating widget on top of other windows with a live speed graph and tracks daily bandwidth usage.
 
 > [!NOTE]
-> 🤖 **Примечание**: Проект и исходный код программы созданы с помощью искусственного интеллекта (AI).
+> 🤖 **Note**: This project and its source code were generated with the help of Artificial Intelligence (AI).
 
 ---
 
-## ✨ Основные возможности
+## ✨ Features
 
-- 📊 **Мониторинг в реальном времени**: Отслеживание входящей (Download), исходящей (Upload) и суммарной скорости сети.
-- 📈 **График скорости**: Наглядная динамика изменения скорости с динамической шкалой.
-- 💾 **Учет трафика**: Автоматический подсчет и сохранение объема переданных и полученных данных по дням. Таблица статистики.
-- ⚙️ **Гибкая настройка внешнего вида**:
-  - Кастомизация цветов (фон окна, график, сетка, линии скорости, шкала текста).
-  - Выбор толщины линий и масштаба (пикселей на точку).
-  - Настройка прозрачности окна в обычном режиме и при наведении курсора.
-  - Настройка размеров и положения текстовых меток (сверху, снизу, слева, справа).
-- 🔄 **Единицы измерения**: Переключение между Байт/с (KB/s, MB/s) и Бит/с (Kbps, Mbps).
-- 🌐 **Выбор сетевого интерфейса**: Мониторинг всех адаптеров или конкретного сетевого подключения (Wi-Fi, Ethernet, VPN и др.).
-- 📌 **Удобство использования**:
-  - Режим «Поверх всех окон» (Always on Top) и «Залипание» (Pin).
-  - Режим «Прокликивания» (Click-Through / Сквозной клик).
-  - Автоматическое сохранение размеров и позиции окна.
-  - Работа в системном трее (Tray Icon).
-  - Функция быстрого создания ярлыка на рабочем столе.
+- 📊 **Real-Time Monitoring**: Track incoming (Download), outgoing (Upload), and combined network speed.
+- 📈 **Live Speed Graph**: Clear visual speed dynamics with a dynamic auto-scaling grid.
+- 💾 **Traffic Tracking**: Automatically measures and saves daily network bandwidth consumption with a statistics table.
+- ⚙️ **Customizable Appearance**:
+  - Full color customization (window background, graph background, grid, speed lines, scale text).
+  - Configurable line thickness and graph scale (pixels per data point).
+  - Window transparency controls for normal and mouse-hover states.
+  - Adjustable speed label positions (Top, Bottom, Left, Right) and font sizes.
+- 🔄 **Multiple Units**: Toggle between Bytes/s (KB/s, MB/s) and Bits/s (Kbps, Mbps).
+- 🌐 **Network Interface Selector**: Monitor all network adapters combined or lock to a specific adapter (Wi-Fi, Ethernet, VPN, etc.).
+- 📌 **Convenient UX**:
+  - "Always on Top" and "Pin" modes.
+  - Click-Through mode (ignore mouse clicks and pass through to background windows).
+  - Automatically saves and restores window dimensions and position.
+  - System Tray integration (Tray Icon menu).
+  - One-click Desktop Shortcut creation.
 
 ---
 
-## 🚀 Быстрый запуск
+## 🚀 Quick Start
 
-### Вариант 1: Исполняемый файл (`.exe`)
-1. Запустите `NetSpeed.exe`.
-2. Виджет появится по центру экрана и сразу начнет отображать текущую скорость сети.
-3. Правый клик мыши по виджету открывает контекстное меню настроек.
+### Option 1: Executable (`.exe`)
+1. Run `NetSpeed.exe`.
+2. The widget will appear centered on screen and start displaying live network activity immediately.
+3. Right-click the widget to open the context menu for settings.
 
-### Вариант 2: Запуск PowerShell скрипта (`.ps1`)
-Запустите PowerShell и выполните скрипт:
+### Option 2: Run via PowerShell (`.ps1`)
+Open PowerShell and run the script:
 ```powershell
 powershell -ExecutionPolicy Bypass -File "NetSpeed.ps1"
 ```
 
 ---
 
-## 🛠 Сборка `.exe` из исходного кода
+## 🛠 Building `.exe` from Source
 
-В проект встроен скрипт автоматической сборки в исполняемый файл `.exe` с помощью модуля `ps2exe`.
+The repository includes automated build scripts to compile the `.ps1` script into a standalone `.exe` using the `ps2exe` module.
 
-### Инструкция по сборке:
-1. Запустите файл `build_exe.bat` (или вызовите `build_exe.ps1` из PowerShell).
-2. Скрипт автоматически установит модуль `ps2exe` (если он отсутствует) и скомпилирует `NetSpeed.exe`.
+### How to Build:
+1. Double-click `build_exe.bat` (or execute `build_exe.ps1` in PowerShell).
+2. The script will automatically install `ps2exe` if missing and compile `NetSpeed.exe`.
 
 ---
 
-## 📁 Структура проекта
+## 📁 Repository Structure
 
 ```text
-GitHub_Release/
-├── NetSpeed.ps1            # Исходный код приложения (PowerShell + WinForms)
-├── build_exe.ps1           # Скрипт компиляции .ps1 -> .exe
-├── build_exe.bat           # Запуск сборки в один клик
-├── netspeed_settings.json  # Шаблон файлов настроек по умолчанию
-├── .gitignore              # Исключения для Git (история трафика, бинарники)
-└── README.md               # Документация проекта
+NetSpeed/
+├── NetSpeed.ps1            # Main application source code (PowerShell + WinForms)
+├── build_exe.ps1           # Build script (.ps1 -> .exe)
+├── build_exe.bat           # One-click batch launcher for compilation
+├── netspeed_settings.json  # Default settings template
+├── .gitignore              # Git ignore rules (traffic logs, binaries)
+└── README.md               # Project documentation
 ```
 
 ---
 
-## 📜 Лицензия
+## 📜 License
 
-Проект распространяется под лицензией **MIT**. Вы можете свободно использовать, изменять и распространять данное ПО.
+Distributed under the **MIT License**. Free for personal and commercial use, modification, and distribution.
