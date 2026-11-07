@@ -7,6 +7,8 @@
 
 ---
 
+https://github.com/user-attachments/assets/c09d3691-42c8-4530-a414-2dd737ea8e5f
+
 ## ✨ Features
 
 - 📊 **Real-Time Monitoring**: Track incoming (Download), outgoing (Upload), and combined network speed.
